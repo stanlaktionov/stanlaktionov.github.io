@@ -1,0 +1,18 @@
+.main-content {
+  flex: 1;
+}
+/*Handle it with JS?*/
+body.js-hover-carousel-page {
+  background-color: #ffffff;
+}
+body.js-hover-carousel-page .main-header.header-container {
+  border-bottom: 0;
+}
+body.js-hover-carousel-page .footer__back-to-top {
+  display: none;
+}
+@media (max-width: 1023px) {
+  .main-content {
+    padding-top: 65px;
+  }
+}

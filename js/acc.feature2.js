@@ -1,34 +1,3 @@
-$.fn.parallax = function (resistance, mouse) {
-  var $el = $(this);
-  var $c = $(this).find('.js-hover-carousel-list');
-  var containerWith = $el.width();
-  var containerHeight = $el.outerHeight();
-  var carouselWidth = $c.width();
-  var carouselHeight = $c.outerHeight();
-  var mouse_x = mouse.pageX - $el.offset().left;
-  var mouse_y = mouse.pageY - $el.offset().top;
-  var mouse_x_per = mouse_x * 100 / containerWith;
-  var mouse_y_per = mouse_y * 100 / containerHeight;
-  var carouselX = carouselWidth * mouse_x_per / 100;
-  var carouselY = carouselHeight * mouse_y_per / 100;
-  var maxX = carouselWidth - containerWith;
-  var maxY = carouselHeight - containerHeight;
-
-  if (carouselX > maxX) {
-    carouselX = maxX;
-  }
-
-  if (carouselY > maxY) {
-    carouselY = maxY;
-  }
-
-  var conf = {
-    x: -carouselX,
-    y: -carouselY,
-  };
-  TweenLite.to($c, 1.5, conf);
-};
-
 ACC.global = {
   adjustPage: function (callback) {
     $('body').addClass('js-hover-carousel-page');
@@ -60,11 +29,6 @@ ACC.hoverCarousel = {
     ACC.global.adjustPage(function () {
       var distanceFromTop = $hoverCarousel.offset().top;
       $hoverCarousel.css({ 'height': 'calc(100vh)' });
-      var listWidth = Array.prototype.reduce.call($items, function (width, item) {
-        width += $(item).outerWidth(true);
-        return width;
-      }, 0);
-      $list.css({ 'width': listWidth + 'px' });
 
       var body = $("html, body");
       body.stop().animate({ scrollTop: distanceFromTop }, 500, 'swing');
@@ -84,13 +48,7 @@ ACC.hoverCarousel = {
 
       enquire.register('screen and (min-width: 1023px)', {
         match: function () {
-          $hoverCarousel
-            .on('mousemove', function (e) {
-              $hoverCarousel.parallax(-15, e)
-            })
-            .on('mouseout', function () {
-              TweenLite.to($('.js-hover-carousel-list'), 0.2, { x: 0, y: 0 });
-            });
+          $hoverCarousel.hoverScrollCarousel(ACC.hoverCarousel.hoverCarouselConfig);
 
         },
         unmatch: function () {

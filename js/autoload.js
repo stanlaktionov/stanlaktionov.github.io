@@ -1,4 +1,4 @@
-function _autoload() {
+function autoload() {
   $.each(ACC, function (section, obj) {
     if ($.isArray(obj._autoload)) {
       $.each(obj._autoload, function (key, value) {
@@ -19,5 +19,5 @@ function _autoload() {
 }
 
 $(function () {
-  _autoload();
+  autoload();
 });

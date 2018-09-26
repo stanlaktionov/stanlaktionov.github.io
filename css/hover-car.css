@@ -1,0 +1,119 @@
+@keyframes carousel-item-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.carousel-item-fade-in {
+  animation-name: carousel-item-fade-in;
+  animation-timing-function: cubic-bezier(0.75, 0.36, 0.69, 0.75);
+}
+.hover-carousel {
+  position: relative;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.hover-carousel__wrapper {
+  position: relative;
+  margin-bottom: 50px;
+  overflow: hidden;
+}
+@media (max-width: 1023px) {
+  .hover-carousel__wrapper {
+    overflow-x: scroll;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+  }
+  .hover-carousel__wrapper::-webkit-scrollbar {
+    display: none;
+  }
+}
+.hover-carousel__list {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  display: flex;
+  font-size: 0;
+  list-style: none;
+}
+.hover-carousel__item {
+  margin: 0 10px 0 0;
+  padding: 0;
+}
+.hover-carousel__item > a {
+  display: block;
+}
+.hover-carousel__item:first-child {
+  margin-left: 50px;
+}
+.hover-carousel__item:last-child {
+  margin-right: 50px;
+}
+@media (max-width: 1023px) {
+  .hover-carousel__item {
+    opacity: 1;
+  }
+  .hover-carousel__item:first-child {
+    margin-left: 15px;
+  }
+  .hover-carousel__item:last-child {
+    margin-right: 15px;
+  }
+}
+.hover-carousel__item,
+.hover-carousel__tile {
+  z-index: 0;
+}
+.hover-carousel__item:hover .hover-carousel__tile {
+  z-index: 1;
+}
+.hover-carousel__tile {
+  position: relative;
+  margin-bottom: 10px;
+  transition: 0.5s opacity;
+}
+.hover-carousel__tile--hovered {
+  opacity: 0.6;
+}
+.hover-carousel__tile img {
+  max-width: 500px;
+}
+.hover-carousel__tile--double img {
+  max-width: 445px;
+}
+@media (max-width: 1023px) {
+  .hover-carousel__tile img {
+    max-width: 320px;
+  }
+  .hover-carousel__tile--double img {
+    max-width: 250px;
+  }
+}
+.hover-carousel__button {
+  position: absolute;
+  bottom: 0;
+  opacity: 0;
+  z-index: 1;
+  padding: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  transition: 0.5s opacity;
+}
+.hover-carousel__button button {
+  padding: 7px 0;
+}
+@media (max-width: 1023px) {
+  .hover-carousel__button {
+    opacity: 1;
+    transition: none;
+  }
+}
+.hover-carousel__tile:hover .hover-carousel__button {
+  opacity: 1;
+}

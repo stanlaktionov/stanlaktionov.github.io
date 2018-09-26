@@ -13,10 +13,19 @@
 
   StickyImage.prototype = {
     init: function () {
+      this._addStyles();
       this._attachEventListeners();
     },
     destroy: function () {
-      this._removeEventListeners()
+      this._removeEventListeners();
+      this._resetStyles();
+    },
+    _addStyles: function () {
+      var styles = $('<style>');
+      styles
+        .html('.bottom-image {  position: absolute; bottom: 0; width: 100%;} .fixed-image {position: fixed; width: 50%; top: 0}')
+        .attr('data-sticky-style', true);
+      $('head').append(styles);
     },
     _attachEventListeners: function () {
       var self = this;
@@ -24,8 +33,11 @@
     },
     _removeEventListeners: function () {
       var self = this;
-
       self.$w.off('scroll.stickyImage');
+    },
+    _resetStyles: function() {
+      this.$stickyImage.removeClass('fixed-image bottom-image');
+      $('[data-sticky-style]').remove();
     },
     _windowScrollEventHandler: function () {
       var self = this;
@@ -53,7 +65,7 @@
     }
   };
 
-  $.fn[ stickyImage ] = function (options) {
+  $.fn[stickyImage] = function (options) {
     if (!$(this).length) {
       console.warn('Slide Menu: Unable to find menu DOM element. Maybe a typo?');
       return;

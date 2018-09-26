@@ -1,0 +1,150 @@
+@side-margin-desk: 50px;
+@side-margi-mob: 15px;
+@SCREEN_SM_MAX: 1023px;
+@tile-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+@desktop-single-image-width: 500px;
+@desktop-double-image-width: 445px;
+@mobile-single-image-width: 320px;
+@mobile-double-image-width: 250px;
+//ANIMATION
+@keyframes carousel-item-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.carousel-item-fade-in {
+  animation-name: carousel-item-fade-in;
+  animation-timing-function: cubic-bezier(.75, .36, .69, .75);
+}
+
+.hover-carousel {
+  position: relative;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+
+  &__wrapper {
+    position: relative;
+    margin-bottom: 50px;
+    overflow: hidden;
+
+    @media (max-width: @SCREEN_SM_MAX) {
+      overflow-x: scroll;
+      overflow: -moz-scrollbars-none;
+      -ms-overflow-style: none;
+
+      &::-webkit-scrollbar {
+        display: none;
+      }
+    }
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    font-size: 0;
+    list-style: none;
+  }
+
+  &__item {
+    margin: 0 10px 0 0;
+    padding: 0;
+    //opacity: 0;
+    & > a {
+      display: block;
+    }
+    &:first-child {
+      margin-left: @side-margin-desk;
+    }
+
+    &:last-child {
+      margin-right: @side-margin-desk;
+    }
+
+    @media (max-width: @SCREEN_SM_MAX) {
+      opacity: 1;
+
+      &:first-child {
+        margin-left: @side-margi-mob;
+      }
+
+      &:last-child {
+        margin-right: @side-margi-mob;
+      }
+    }
+  }
+
+  &__item,
+  &__tile {
+    z-index: 0;
+  }
+
+  &__item:hover &__tile {
+    z-index: 1;
+  }
+
+  &__tile {
+    position: relative;
+    margin-bottom: 10px;
+    transition: .5s opacity;
+
+    &--hovered {
+      opacity: 0.6;
+    }
+
+    img {
+      max-width: @desktop-single-image-width;
+    }
+
+    &--double {
+      img {
+        max-width: @desktop-double-image-width;
+      }
+    }
+
+    @media (max-width: @SCREEN_SM_MAX) {
+      img {
+        max-width: @mobile-single-image-width;
+      }
+
+      &--double {
+        img {
+          max-width: @mobile-double-image-width;
+        }
+      }
+    }
+  }
+
+  &__button {
+    position: absolute;
+    bottom: 0;
+    opacity: 0;
+    z-index: 1;
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    transition: 0.5s opacity;
+
+    button {
+      padding: 7px 0;
+    }
+
+    @media (max-width: @SCREEN_SM_MAX) {
+      opacity: 1;
+      transition: none;
+    }
+  }
+
+  &__tile:hover &__button {
+    opacity: 1;
+  }
+}
