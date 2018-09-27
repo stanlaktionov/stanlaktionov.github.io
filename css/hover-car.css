@@ -54,7 +54,7 @@
 }
 @media (max-width: 1023px) {
   .hover-carousel__item {
-    opacity: 1;
+    opacity: 1 !important;
   }
   .hover-carousel__item:first-child {
     margin-left: 15px;
@@ -81,12 +81,19 @@
 .hover-carousel__tile img {
   max-width: 500px;
 }
+.hover-carousel__tile video {
+  width: 500px;
+  display: block;
+}
 .hover-carousel__tile--double img {
   max-width: 445px;
 }
 @media (max-width: 1023px) {
   .hover-carousel__tile img {
     max-width: 320px;
+  }
+  .hover-carousel__tile video {
+    width: 320px;
   }
   .hover-carousel__tile--double img {
     max-width: 250px;

@@ -67,7 +67,11 @@ ACC.hoverCarousel = {
       $list.css({ 'width': listWidth + 'px' });
 
       var body = $("html, body");
-      body.stop().animate({ scrollTop: distanceFromTop }, 500, 'swing');
+
+      $('.js-hover-carousel-list').on('mouseenter.car-list', function() {
+        body.stop().animate({ scrollTop: distanceFromTop }, 500, 'swing');
+        $('.js-hover-carousel-list').off('mouseenter.car-list');
+      });
 
       tiles.hoverIntent({
         over: function (e) {

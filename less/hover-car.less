@@ -68,7 +68,7 @@
     }
 
     @media (max-width: @SCREEN_SM_MAX) {
-      opacity: 1;
+      opacity: 1 !important;
 
       &:first-child {
         margin-left: @side-margi-mob;
@@ -102,6 +102,11 @@
       max-width: @desktop-single-image-width;
     }
 
+    video {
+      width: @desktop-single-image-width;
+      display: block;
+    }
+
     &--double {
       img {
         max-width: @desktop-double-image-width;
@@ -111,6 +116,10 @@
     @media (max-width: @SCREEN_SM_MAX) {
       img {
         max-width: @mobile-single-image-width;
+      }
+
+      video {
+        width: @mobile-single-image-width;
       }
 
       &--double {
