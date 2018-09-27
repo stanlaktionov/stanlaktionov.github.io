@@ -4,6 +4,7 @@
   function HoverParallax(element, options) {
     this.defaults = {
       speed: 1.5,
+      resetOnMouseLeave: false,
     };
     this.options = $.extend({}, this.defaults, options);
     this.$el = $(element);
@@ -37,7 +38,9 @@
           self._updateTranslate(self, coordinates);
         })
         .on('mouseout.hoverParallax', function () {
-          self._updateTranslate(self);
+          if(self.options.resetOnMouseLeave) {
+            self._updateTranslate(self);
+          }
         });
 
       self.$w.on('resize.hoverParallax', function () {
@@ -57,9 +60,10 @@
 
       self.elementWidth = self.$el.width();
       self.elementHeight = self.$el.height();
-      self.sceneWidth = self.$scene.width();
+      self.sceneWidth = self.$scene[0].scrollWidth;
       self.sceneHeight = self.$scene.height();
       self.maxTranslateX = self.sceneWidth - self.elementWidth;
+      //TODO: Figure out where is this magic number from
       self.maxTranslateY = self.sceneHeight - self.elementHeight + 150;
 
     },

@@ -10,15 +10,6 @@ ACC.hoverCarousel = {
   _autoload: [
     [ 'initHoverCarousel', $('.js-hover-carousel').length > 0 ]
   ],
-  setInnerComponentWidth: function () {
-    var $list = $('.js-hover-carousel-list');
-    var $items = $list.find('>li');
-    var listWidth = Array.prototype.reduce.call($items, function (width, item) {
-      width += $(item).outerWidth(true);
-      return width;
-    }, 0);
-    $list.css({ 'width': listWidth + 'px' });
-  },
   initializeTilesHover: function () {
     var tiles = $('.hover-carousel__tile');
 
@@ -35,19 +26,13 @@ ACC.hoverCarousel = {
       interval: 0,
     });
   },
-  scrollIntoView: function (distanceFromTop) {
-    var body = $("html, body");
-    body.stop().animate({ scrollTop: distanceFromTop }, 500, 'swing');
-  },
   initDesktopHoverCarousel: function ($hoverCarousel) {
     enquire.register('screen and (min-width: 1023px)', {
       match: function () {
-        ACC.hoverCarousel.setInnerComponentWidth();
+        var height = 'calc(100vh - ' + $hoverCarousel.offset().top + 'px)';
+
+        $hoverCarousel.css({ 'height': height });
         $hoverCarousel.hoverParallax();
-        $hoverCarousel.on('mouseenter.car-list', function () {
-          ACC.hoverCarousel.scrollIntoView($hoverCarousel.offset().top);
-          $hoverCarousel.off('mouseenter.car-list');
-        });
         ACC.hoverCarousel.initializeTilesHover();
       },
       unmatch: function () {
@@ -55,30 +40,7 @@ ACC.hoverCarousel = {
           $hoverCarousel.data('hoverParallax').destroy();
           $hoverCarousel.off('mouseenter.car-list');
         }
-      }
-    });
-  },
-  initMobileHoverCarousel: function ($hoverCarousel) {
-    enquire.register('screen and (max-width: 1023px)', {
-      match: function () {
-        $('html, body').on('scroll', function (e) {
-          if ($(this).hasClass('scroll-prevent')) {
-            e.preventDefault();
-          }
-        });
-        $hoverCarousel.on('scroll', function () {
-          if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[ 0 ].scrollHeight) {
-            $('html, body').removeClass('scroll-prevent');
-          } else {
-            $('html, body').addClass('scroll-prevent');
-          }
-        });
-        $hoverCarousel.on('touchstart.car-list', function() {
-          ACC.hoverCarousel.scrollIntoView($hoverCarousel.offset().top);
-          $hoverCarousel.off('touchstart.car-list');
-        });
-      },
-      unmatch: function () {
+        $hoverCarousel.css({ 'height': 'auto' });
       }
     });
   },
@@ -87,13 +49,12 @@ ACC.hoverCarousel = {
       var $hoverCarousel = $('.js-hover-carousel');
 
       ACC.hoverCarousel.initDesktopHoverCarousel($hoverCarousel);
-      ACC.hoverCarousel.initMobileHoverCarousel($hoverCarousel);
       ACC.hoverCarousel.animate();
     });
   },
-  animate: function() {
+  animate: function () {
     var $carouselItems = $('.js-hover-carousel-item');
-    var animationDuration =  0.35;
+    var animationDuration = 0.35;
     var animationDelay = 0.1;
     var animationDurationInc = 0;
     var animationDelayInc = 0.25;

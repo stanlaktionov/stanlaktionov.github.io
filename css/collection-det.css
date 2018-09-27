@@ -138,6 +138,13 @@
   color: #000;
   font-family: 'Pragati Narrow', sans-serif;
 }
+.collection-details__headline:after {
+  content: '';
+  display: block;
+  height: 2px;
+  width: 25px;
+  background-color: #000;
+}
 .collection-details__headline.big {
   font-size: 54px;
   letter-spacing: 2px;
@@ -146,12 +153,12 @@
 .collection-details__headline.big:after {
   margin-top: 20px;
 }
-.collection-details__headline .middle {
+.collection-details__headline.middle {
   font-size: 36px;
   line-height: 36px;
   letter-spacing: 1.4px;
 }
-.collection-details__headline .middle:after {
+.collection-details__headline.middle:after {
   margin-top: 15px;
 }
 @media (max-width: 1023px) {

@@ -30,7 +30,8 @@
   overflow: hidden;
 
   @media (max-width: @SCREEN_SM_MAX) {
-    overflow: scroll;
+    height: auto !important;
+    overflow-x: scroll;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
     -webkit-overflow-scrolling: touch;
@@ -42,8 +43,6 @@
 
   &__list {
     margin: 0;
-    padding: 50px 0 0 0;
-    display: flex;
     font-size: 0;
     list-style: none;
 
@@ -55,6 +54,9 @@
   &__item {
     margin: 0 10px 0 0;
     padding: 0;
+    width: 27%;
+    display: inline-block;
+    vertical-align: top;
     opacity: 0;
     & > a {
       display: block;
@@ -68,6 +70,7 @@
     }
 
     @media (max-width: @SCREEN_SM_MAX) {
+      width: 85%;
       &:first-child {
         margin-left: @side-margi-mob;
       }
@@ -93,38 +96,16 @@
     transition: .5s opacity;
 
     &--hovered {
-      opacity: 0.6;
+      opacity: 0.3;
     }
 
     img {
-      max-width: @desktop-single-image-width;
+      max-width: 100%;
     }
 
     video {
-      width: @desktop-single-image-width;
+      width: 100%;
       display: block;
-    }
-
-    &--double {
-      img {
-        max-width: @desktop-double-image-width;
-      }
-    }
-
-    @media (max-width: @SCREEN_SM_MAX) {
-      img {
-        max-width: @mobile-single-image-width;
-      }
-
-      video {
-        width: @mobile-single-image-width;
-      }
-
-      &--double {
-        img {
-          max-width: @mobile-double-image-width;
-        }
-      }
     }
   }
 
