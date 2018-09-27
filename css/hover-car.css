@@ -13,35 +13,38 @@
 .hover-carousel {
   position: relative;
   width: 100%;
+  height: 100vh;
+  margin-bottom: 50px;
   white-space: nowrap;
   overflow: hidden;
 }
-.hover-carousel__wrapper {
-  position: relative;
-  margin-bottom: 50px;
-  overflow: hidden;
-}
 @media (max-width: 1023px) {
-  .hover-carousel__wrapper {
-    overflow-x: scroll;
+  .hover-carousel {
+    overflow: scroll;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
   }
-  .hover-carousel__wrapper::-webkit-scrollbar {
+  .hover-carousel::-webkit-scrollbar {
     display: none;
   }
 }
 .hover-carousel__list {
   margin: 0;
-  padding: 0;
-  height: 100%;
+  padding: 50px 0 0 0;
   display: flex;
   font-size: 0;
   list-style: none;
 }
+@media (max-width: 1023px) {
+  .hover-carousel__list {
+    padding: 0;
+  }
+}
 .hover-carousel__item {
   margin: 0 10px 0 0;
   padding: 0;
+  opacity: 0;
 }
 .hover-carousel__item > a {
   display: block;
@@ -53,9 +56,6 @@
   margin-right: 50px;
 }
 @media (max-width: 1023px) {
-  .hover-carousel__item {
-    opacity: 1 !important;
-  }
   .hover-carousel__item:first-child {
     margin-left: 15px;
   }

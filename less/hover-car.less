@@ -24,38 +24,38 @@
 .hover-carousel {
   position: relative;
   width: 100%;
+  height: 100vh;
+  margin-bottom: 50px;
   white-space: nowrap;
   overflow: hidden;
 
-  &__wrapper {
-    position: relative;
-    margin-bottom: 50px;
-    overflow: hidden;
+  @media (max-width: @SCREEN_SM_MAX) {
+    overflow: scroll;
+    overflow: -moz-scrollbars-none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
 
-    @media (max-width: @SCREEN_SM_MAX) {
-      overflow-x: scroll;
-      overflow: -moz-scrollbars-none;
-      -ms-overflow-style: none;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 
   &__list {
     margin: 0;
-    padding: 0;
-    height: 100%;
+    padding: 50px 0 0 0;
     display: flex;
     font-size: 0;
     list-style: none;
+
+    @media (max-width: @SCREEN_SM_MAX) {
+      padding: 0;
+    }
   }
 
   &__item {
     margin: 0 10px 0 0;
     padding: 0;
-    //opacity: 0;
+    opacity: 0;
     & > a {
       display: block;
     }
@@ -68,8 +68,6 @@
     }
 
     @media (max-width: @SCREEN_SM_MAX) {
-      opacity: 1 !important;
-
       &:first-child {
         margin-left: @side-margi-mob;
       }

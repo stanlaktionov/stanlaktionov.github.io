@@ -1,34 +1,3 @@
-$.fn.parallax = function (resistance, mouse) {
-  var $el = $(this);
-  var $c = $(this).find('.js-hover-carousel-list');
-  var containerWith = $el.width();
-  var containerHeight = $el.outerHeight();
-  var carouselWidth = $c.width();
-  var carouselHeight = $c.outerHeight();
-  var mouse_x = mouse.pageX - $el.offset().left;
-  var mouse_y = mouse.pageY - $el.offset().top;
-  var mouse_x_per = mouse_x * 100 / containerWith;
-  var mouse_y_per = mouse_y * 100 / containerHeight;
-  var carouselX = carouselWidth * mouse_x_per / 100;
-  var carouselY = carouselHeight * mouse_y_per / 100;
-  var maxX = carouselWidth - containerWith;
-  var maxY = carouselHeight - containerHeight;
-
-  if (carouselX > maxX) {
-    carouselX = maxX;
-  }
-
-  if (carouselY > maxY) {
-    carouselY = maxY;
-  }
-
-  var conf = {
-    x: -carouselX,
-    y: -carouselY,
-  };
-  TweenLite.to($c, 1.5, conf);
-};
-
 ACC.global = {
   adjustPage: function (callback) {
     $('body').addClass('js-hover-carousel-page');
@@ -41,70 +10,106 @@ ACC.hoverCarousel = {
   _autoload: [
     [ 'initHoverCarousel', $('.js-hover-carousel').length > 0 ]
   ],
-  hoverCarouselConfig: {
-    animation: {
-      animationDuration: 0.25,
-      animationDurationInc: 0.1,
-      animationDelay: 0,
-      animationDelayInc: 0.2,
-      animationClassName: 'carousel-item-fade-in'
-    },
-    acceleration: 2,
-  },
-  initHoverCarousel: function () {
-    var $hoverCarousel = $('.js-hover-carousel');
-    var tiles = $('.hover-carousel__tile');
+  setInnerComponentWidth: function () {
     var $list = $('.js-hover-carousel-list');
     var $items = $list.find('>li');
+    var listWidth = Array.prototype.reduce.call($items, function (width, item) {
+      width += $(item).outerWidth(true);
+      return width;
+    }, 0);
+    $list.css({ 'width': listWidth + 'px' });
+  },
+  initializeTilesHover: function () {
+    var tiles = $('.hover-carousel__tile');
 
-    ACC.global.adjustPage(function () {
-      var distanceFromTop = $hoverCarousel.offset().top;
-      $hoverCarousel.css({ 'height': 'calc(100vh)' });
-      var listWidth = Array.prototype.reduce.call($items, function (width, item) {
-        width += $(item).outerWidth(true);
-        return width;
-      }, 0);
-      $list.css({ 'width': listWidth + 'px' });
+    tiles.hoverIntent({
+      over: function (e) {
+        tiles.filter(function (idx, item) {
+          return item !== e.currentTarget
+        }).addClass('hover-carousel__tile--hovered');
 
-      var body = $("html, body");
-
-      $('.js-hover-carousel-list').on('mouseenter.car-list', function() {
-        body.stop().animate({ scrollTop: distanceFromTop }, 500, 'swing');
-        $('.js-hover-carousel-list').off('mouseenter.car-list');
-      });
-
-      tiles.hoverIntent({
-        over: function (e) {
-          tiles.filter(function (idx, item) {
-            return item !== e.currentTarget
-          }).addClass('hover-carousel__tile--hovered');
-
-        },
-        out: function () {
-          tiles.removeClass('hover-carousel__tile--hovered');
-        },
-        interval: 0,
-      });
-
-      enquire.register('screen and (min-width: 1023px)', {
-        match: function () {
-          $hoverCarousel
-            .on('mousemove', function (e) {
-              $hoverCarousel.parallax(-15, e)
-            })
-            .on('mouseout', function () {
-              TweenLite.to($('.js-hover-carousel-list'), 0.2, { x: 0, y: 0 });
-            });
-
-        },
-        unmatch: function () {
-          if ($hoverCarousel.data('hoverScrollCarousel')) {
-            $hoverCarousel.data('hoverScrollCarousel').destroy();
-          }
-        }
-      });
+      },
+      out: function () {
+        tiles.removeClass('hover-carousel__tile--hovered');
+      },
+      interval: 0,
     });
   },
+  scrollIntoView: function (distanceFromTop) {
+    var body = $("html, body");
+    body.stop().animate({ scrollTop: distanceFromTop }, 500, 'swing');
+  },
+  initDesktopHoverCarousel: function ($hoverCarousel) {
+    enquire.register('screen and (min-width: 1023px)', {
+      match: function () {
+        ACC.hoverCarousel.setInnerComponentWidth();
+        $hoverCarousel.hoverParallax();
+        $hoverCarousel.on('mouseenter.car-list', function () {
+          ACC.hoverCarousel.scrollIntoView($hoverCarousel.offset().top);
+          $hoverCarousel.off('mouseenter.car-list');
+        });
+        ACC.hoverCarousel.initializeTilesHover();
+      },
+      unmatch: function () {
+        if ($hoverCarousel.data('hoverParallax')) {
+          $hoverCarousel.data('hoverParallax').destroy();
+          $hoverCarousel.off('mouseenter.car-list');
+        }
+      }
+    });
+  },
+  initMobileHoverCarousel: function ($hoverCarousel) {
+    enquire.register('screen and (max-width: 1023px)', {
+      match: function () {
+        $('html, body').on('scroll', function (e) {
+          if ($(this).hasClass('scroll-prevent')) {
+            e.preventDefault();
+          }
+        });
+        $hoverCarousel.on('scroll', function () {
+          if ($(this).scrollTop() + $(this).innerHeight() >= $(this)[ 0 ].scrollHeight) {
+            $('html, body').removeClass('scroll-prevent');
+          } else {
+            $('html, body').addClass('scroll-prevent');
+          }
+        });
+        $hoverCarousel.on('touchstart.car-list', function() {
+          ACC.hoverCarousel.scrollIntoView($hoverCarousel.offset().top);
+          $hoverCarousel.off('touchstart.car-list');
+        });
+      },
+      unmatch: function () {
+      }
+    });
+  },
+  initHoverCarousel: function () {
+    ACC.global.adjustPage(function () {
+      var $hoverCarousel = $('.js-hover-carousel');
+
+      ACC.hoverCarousel.initDesktopHoverCarousel($hoverCarousel);
+      ACC.hoverCarousel.initMobileHoverCarousel($hoverCarousel);
+      ACC.hoverCarousel.animate();
+    });
+  },
+  animate: function() {
+    var $carouselItems = $('.js-hover-carousel-item');
+    var animationDuration =  0.35;
+    var animationDelay = 0.1;
+    var animationDurationInc = 0;
+    var animationDelayInc = 0.25;
+
+    $carouselItems.each(function (idx, item) {
+      $(item)
+        .css({ 'animation-duration': animationDuration + 's', 'animation-delay': animationDelay + 's' })
+        .addClass('carousel-item-fade-in')
+        .on('animationend', function () {
+          $(item).css({ 'opacity': 1 });
+        });
+
+      animationDuration += animationDurationInc;
+      animationDelay += animationDelayInc;
+    });
+  }
 };
 
 ACC.stickyImagePage = {
