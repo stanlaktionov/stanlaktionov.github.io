@@ -10,7 +10,6 @@
     this.$el = $(element);
     this.$scene = $(element).find('.js-scene');
     this.$w = $(window);
-    console.log(this.options);
     this.init();
   }
 
@@ -38,7 +37,7 @@
           self._updateTranslate(self, coordinates);
         })
         .on('mouseout.hoverParallax', function () {
-          if(self.options.resetOnMouseLeave) {
+          if (self.options.resetOnMouseLeave) {
             self._updateTranslate(self);
           }
         });
@@ -46,7 +45,11 @@
       self.$w.on('resize.hoverParallax', function () {
         self._getElementSizes();
       });
+      this._onVideoLoaded(self._getElementSizes.bind(self));
+      this._onImagesLoaded(self._getElementSizes.bind(self));
+
     },
+
     _removeEventListeners: function () {
       var self = this;
 
@@ -60,11 +63,10 @@
 
       self.elementWidth = self.$el.width();
       self.elementHeight = self.$el.height();
-      self.sceneWidth = self.$scene[0].scrollWidth;
+      self.sceneWidth = self.$scene[ 0 ].scrollWidth;
       self.sceneHeight = self.$scene.height();
       self.maxTranslateX = self.sceneWidth - self.elementWidth;
-      //TODO: Figure out where is this magic number from
-      self.maxTranslateY = self.sceneHeight - self.elementHeight + 150;
+      self.maxTranslateY = self.sceneHeight - self.elementHeight;
 
     },
     _updateTranslate: function (self, coordinates) {
@@ -102,6 +104,27 @@
     _resetStyles: function () {
       var self = this;
       self.$scene.css({ 'transform': '' });
+    },
+    _onVideoLoaded: function (cb) {
+      var self = this;
+      var videos = self.$el.find('video');
+
+      videos.one('loadedmetadata', function () {
+        if (cb) {
+          cb();
+        }
+      })
+
+    },
+    _onImagesLoaded: function (cb) {
+      var self = this;
+      var img = self.$el.find('img');
+      img.one('load', function() {
+        console.log('aaaa');
+        if(cb) {
+          cb();
+        }
+      });
     }
   };
 
