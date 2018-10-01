@@ -47,8 +47,15 @@ ACC.hoverCarousel = {
   initMobileHoverCarousel: function($hoverCarousel) {
     enquire.register('screen and (max-width: 1023px)', {
       match: function () {
-        var height = 'calc(100vh - ' + $hoverCarousel.offset().top + 'px)';
-        $hoverCarousel.css({ 'height': height });
+        var top = $hoverCarousel.offset().top;
+        $hoverCarousel.on('scroll.initMobileHoverCarousel', function() {
+          console.log(top);
+          $('html, body').animate({scrollTop: top}, 500);
+          $hoverCarousel.off('scroll.initMobileHoverCarousel');
+        });
+      },
+      unmatch: function() {
+        $hoverCarousel.off('scroll.initMobileHoverCarousel');
       }
     });
   },

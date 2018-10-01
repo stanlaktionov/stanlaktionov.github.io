@@ -125,7 +125,6 @@
       var self = this;
       var img = self.$el.find('img');
       img.one('load', function () {
-        console.log('aaaa');
         if (cb) {
           cb();
         }
