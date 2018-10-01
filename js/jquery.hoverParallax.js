@@ -2,23 +2,24 @@
   var hoverParallax = 'hoverParallax';
 
   function HoverParallax(element, options) {
+    if (!d3) {
+      console.warn('Hover Parallax has dependency on d3. Please add it to your project - https://d3js.org/');
+      return
+    }
     this.defaults = {
-      speed: 1.5,
+      speed: 1500,
       resetOnMouseLeave: false,
     };
     this.options = $.extend({}, this.defaults, options);
     this.$el = $(element);
     this.$scene = $(element).find('.js-scene');
+    this.scene = d3.select('.js-scene');
     this.$w = $(window);
     this.init();
   }
 
   HoverParallax.prototype = {
     init: function () {
-      if (!TweenLite in window) {
-        console.warn('Hover Parallax has dependency on TweenLite. Please add it to your project - https://greensock.com/tweenlite');
-        return
-      }
       this._getElementSizes();
       this._attachEventListeners();
     },
@@ -75,9 +76,13 @@
         y: 0
       };
       var updateValues = coordinates || defaults;
+      var translate = 'translate(' + updateValues.x + 'px, ' + updateValues.y + 'px)';
 
-
-      TweenLite.to(self.$scene, self.options.speed, updateValues);
+      self.scene
+        .transition()
+        .ease(d3.easePolyOut)
+        .duration(self.options.speed)
+        .style('transform', translate);
     },
     _getTranslateCoordinates: function (self, mouseEvent) {
       var mouseX = mouseEvent.pageX - self.$el.offset().left;
@@ -119,9 +124,9 @@
     _onImagesLoaded: function (cb) {
       var self = this;
       var img = self.$el.find('img');
-      img.one('load', function() {
+      img.one('load', function () {
         console.log('aaaa');
-        if(cb) {
+        if (cb) {
           cb();
         }
       });

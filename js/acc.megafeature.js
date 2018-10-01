@@ -23,7 +23,7 @@ ACC.hoverCarousel = {
       out: function () {
         tiles.removeClass('hover-carousel__tile--hovered');
       },
-      interval: 0,
+      interval: 0
     });
   },
   initDesktopHoverCarousel: function ($hoverCarousel) {
@@ -44,11 +44,19 @@ ACC.hoverCarousel = {
       }
     });
   },
+  initMobileHoverCarousel: function($hoverCarousel) {
+    enquire.register('screen and (max-width: 1023px)', {
+      match: function () {
+        var height = 'calc(100vh - ' + $hoverCarousel.offset().top + 'px)';
+        $hoverCarousel.css({ 'height': height });
+      }
+    });
+  },
   initHoverCarousel: function () {
     ACC.global.adjustPage(function () {
       var $hoverCarousel = $('.js-hover-carousel');
-
       ACC.hoverCarousel.initDesktopHoverCarousel($hoverCarousel);
+      ACC.hoverCarousel.initMobileHoverCarousel($hoverCarousel);
       ACC.hoverCarousel.animate();
     });
   },

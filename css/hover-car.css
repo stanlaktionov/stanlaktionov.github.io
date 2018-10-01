@@ -19,8 +19,7 @@
 }
 @media (max-width: 1023px) {
   .hover-carousel {
-    height: auto !important;
-    overflow-x: scroll;
+    overflow: scroll;
     overflow: -moz-scrollbars-none;
     -ms-overflow-style: none;
     -webkit-overflow-scrolling: touch;
@@ -49,6 +48,9 @@
 }
 .hover-carousel__item > a {
   display: block;
+}
+.hover-carousel__item > a:focus {
+  border: 2px solid yellow;
 }
 .hover-carousel__item:first-child {
   margin-left: 50px;

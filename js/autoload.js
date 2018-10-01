@@ -21,6 +21,3 @@ function autoload() {
 $(function () {
   autoload();
 });
-// $(document).on('ready', function() {
-//   autoload();
-// })
