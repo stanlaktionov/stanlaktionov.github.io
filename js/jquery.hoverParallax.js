@@ -7,7 +7,7 @@
       return
     }
     this.defaults = {
-      speed: 1500,
+      speed: 3500,
       resetOnMouseLeave: false,
     };
     this.options = $.extend({}, this.defaults, options);
@@ -33,9 +33,12 @@
 
       self.$el
         .on('mousemove.hoverParallax', function (e) {
-          var coordinates = self._getTranslateCoordinates(self, e);
+          var tile = $(e.target).parents('.js-hover-carousel-tile');
+          if(tile.length) {
+            var coordinates = self._getTranslateCoordinates2(self, tile);
 
-          self._updateTranslate(self, coordinates);
+            self._updateTranslate(self, coordinates);
+          }
         })
         .on('mouseout.hoverParallax', function () {
           if (self.options.resetOnMouseLeave) {
@@ -83,6 +86,28 @@
         .ease(d3.easePolyOut)
         .duration(self.options.speed)
         .style('transform', translate);
+    },
+    _getTranslateCoordinates2: function (self, target) {
+      var mouseX = target.offset().left - self.$scene.offset().left;
+      var mouseY = target.offset().top - self.$scene.offset().top;
+      var mouseXPercent = mouseX * 100 / self.elementWidth;
+      var mouseYPercent = mouseY * 100 / self.elementHeight;
+
+      var sceneX = self.sceneWidth * mouseXPercent / 100;
+      var sceneY = self.sceneHeight * mouseYPercent / 100;
+
+      if (mouseX > self.maxTranslateX) {
+        mouseX = self.maxTranslateX;
+      }
+
+      if (mouseY > self.maxTranslateY) {
+        mouseY = self.maxTranslateY;
+      }
+
+      return {
+        x: -mouseX,
+        y: -mouseY,
+      }
     },
     _getTranslateCoordinates: function (self, mouseEvent) {
       var mouseX = mouseEvent.pageX - self.$el.offset().left;

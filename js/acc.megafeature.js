@@ -29,7 +29,8 @@ ACC.hoverCarousel = {
   initDesktopHoverCarousel: function ($hoverCarousel) {
     enquire.register('screen and (min-width: 1023px)', {
       match: function () {
-        var height = 'calc(100vh - ' + $hoverCarousel.offset().top + 'px)';
+        // var height = 'calc(100vh - ' + $hoverCarousel.offset().top + 'px)';
+        var height = '100vh';
 
         $hoverCarousel.css({ 'height': height });
         $hoverCarousel.hoverParallax();
