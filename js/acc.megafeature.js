@@ -29,8 +29,8 @@ ACC.hoverCarousel = {
   initDesktopHoverCarousel: function ($hoverCarousel) {
     enquire.register('screen and (min-width: 1023px)', {
       match: function () {
-        // var height = 'calc(100vh - ' + $hoverCarousel.offset().top + 'px)';
-        var height = '100vh';
+        var height = 'calc(100vh - ' + $hoverCarousel.offset().top + 'px)';
+        // var height = '100vh';
 
         $hoverCarousel.css({ 'height': height });
         $hoverCarousel.hoverParallax();
@@ -49,10 +49,33 @@ ACC.hoverCarousel = {
     enquire.register('screen and (max-width: 1023px)', {
       match: function () {
         var top = $hoverCarousel.offset().top;
-        $hoverCarousel.on('scroll.initMobileHoverCarousel', function() {
-          console.log(top);
-          $('html, body').animate({scrollTop: top}, 500);
-          $hoverCarousel.off('scroll.initMobileHoverCarousel');
+        var hasScrolledTop = false;
+        var hasScrolledBottom = false;
+        var initialScroll = 0;
+        $hoverCarousel.on('scroll.initMobileHoverCarousel', function () {
+          var currentScroll = $hoverCarousel.scrollTop();
+
+          if(currentScroll === 0) {
+            hasScrolledTop = false;
+          }
+
+          if(currentScroll + $hoverCarousel.height() === $hoverCarousel[ 0 ].scrollHeight) {
+            hasScrolledBottom = false;
+          }
+
+          if (initialScroll > currentScroll) {
+            if(!hasScrolledBottom) {
+              $('html, body').animate({ scrollTop: top }, 1500);
+              hasScrolledBottom = true;
+            }
+          } else {
+            if (!hasScrolledTop) {
+              $('html, body').animate({ scrollTop: top }, 500);
+              hasScrolledTop = true;
+            }
+          }
+
+          initialScroll = currentScroll;
         });
       },
       unmatch: function() {

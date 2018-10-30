@@ -85,7 +85,7 @@
   opacity: 0.3;
 }
 .hover-carousel__tile img {
-  max-width: 100%;
+  width: 100%;
 }
 .hover-carousel__tile video {
   width: 100%;
